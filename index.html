@@ -1,0 +1,204 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ChocoLove - A Sweet Luxury</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --choco-dark: #0F0805;
+            --choco-gold: #D4AF37;
+            --choco-gold-bright: #FFD700;
+            --choco-cream: #FEFAE0;
+        }
+
+        html { 
+            scroll-behavior: smooth; 
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--choco-dark);
+            color: var(--choco-cream);
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        @media (hover: hover) {
+            body { cursor: none; }
+            #custom-cursor { display: flex; }
+        }
+
+        @media (hover: none) {
+            #custom-cursor { display: none; }
+        }
+
+        .font-romantic { font-family: 'Dancing Script', cursive; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+
+        /* Custom Heart Cursor */
+        #custom-cursor {
+            position: fixed;
+            width: 24px;
+            height: 24px;
+            background: rgba(212, 175, 55, 0.4);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, background 0.3s, transform 0.1s ease-out;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            display: none;
+        }
+        #custom-cursor::after {
+            content: '❤️';
+            font-size: 12px;
+        }
+
+        /* Progress Bar */
+        #progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(to right, transparent, var(--choco-gold), var(--choco-gold-bright));
+            z-index: 9999;
+            width: 0%;
+            box-shadow: 0 0 10px var(--choco-gold);
+            transition: width 0.1s;
+        }
+
+        /* Animations */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .text-shimmer {
+            background: linear-gradient(90deg, #D4AF37, #FFF, #D4AF37, #FFF, #D4AF37);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 5s linear infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+
+        .glass {
+            background: rgba(15, 8, 5, 0.7);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #entrance-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: #0F0805;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 1.2s cubic-bezier(0.8, 0, 0.2, 1), opacity 1s;
+        }
+        #entrance-overlay.unlocked {
+            transform: scale(1.1);
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "vite": "https://esm.sh/vite@^7.3.1",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.3",
+    "@google/genai": "https://esm.sh/@google/genai@^1.40.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <div id="progress-bar"></div>
+    <div id="entrance-overlay">
+        <div class="text-center space-y-10 animate-float px-6">
+            <div class="space-y-2">
+                <span class="text-amber-700 tracking-[0.6em] uppercase text-[10px] font-bold block">Exclusive Invitation</span>
+                <div class="h-px w-12 bg-amber-900 mx-auto"></div>
+            </div>
+            <h2 class="font-serif italic text-4xl md:text-7xl text-amber-100 leading-tight">A Sweet Moment<br/>Waiting For You</h2>
+            <button id="unlock-btn" class="group relative px-14 py-6 overflow-hidden rounded-full border border-amber-500/30 transition-all hover:scale-105 active:scale-90 bg-amber-500/5">
+                <span class="relative z-10 text-amber-500 group-hover:text-amber-100 tracking-[0.4em] font-bold text-xs">OPEN YOUR GIFT</span>
+                <div class="absolute inset-0 bg-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            </button>
+        </div>
+    </div>
+
+    <div id="custom-cursor"></div>
+    <div id="root"></div>
+
+    <!-- Entry point module -->
+    <script type="module" src="/index.tsx"></script>
+
+    <script>
+        const cursor = document.getElementById('custom-cursor');
+        const progressBar = document.getElementById('progress-bar');
+
+        document.addEventListener('mousemove', (e) => {
+            if (cursor) {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            }
+        });
+
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            if(progressBar) progressBar.style.width = scrolled + "%";
+        });
+
+        const unlockBtn = document.getElementById('unlock-btn');
+        const overlay = document.getElementById('entrance-overlay');
+        if(unlockBtn && overlay) {
+            unlockBtn.addEventListener('click', () => {
+                overlay.classList.add('unlocked');
+                window.dispatchEvent(new Event('box-unlocked'));
+            });
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+
+        setInterval(() => {
+            document.querySelectorAll('.reveal:not(.active)').forEach(el => observer.observe(el));
+        }, 300);
+    </script>
+</body>
+</html>

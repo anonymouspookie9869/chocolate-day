@@ -1,0 +1,8 @@
+
+{
+  "name": "ChocoLove Luxe - Premium Romantic Experience",
+  "description": "A world-class, interactive digital chocolate box designed with luxury aesthetics and fluid animations for a truly romantic gesture.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
